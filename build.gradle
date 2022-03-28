@@ -1,0 +1,77 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '2.6.4'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+}
+
+subprojects {
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'java'
+    apply plugin: 'java-library'
+
+    group 'com.kt.cloud'
+    version = '0.0.1-SNAPSHOT'
+    //자바버전 호환성
+    sourceCompatibility = '11'
+
+    /*
+    //뭐하는데 쓰는건지...?
+    ext {
+        set('springCloudVersion', "2021.0.1")      // Spring Cloud for Kafka
+        set('queryDslVersion', "5.0.0")            // QueryDSL
+        set('mapperVersion', "1.4.2")              // Mapper
+    }
+    */
+
+    repositories {
+        mavenCentral()
+    }
+
+
+    //모든 모듈의 공통 의존성 정의. 최소화 원칙 준수
+    dependencies {
+        implementation 'org.springframework.boot:spring-boot-starter'
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+        //Lombok 4총사
+        compileOnly 'org.projectlombok:lombok'
+        annotationProcessor 'org.projectlombok:lombok'
+        testImplementation 'org.projectlombok:lombok'
+        testAnnotationProcessor 'org.projectlombok:lombok'
+
+        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+        testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    }
+
+    /*
+    //이건 머하는건지 모르겠음
+    dependencyManagement {
+        imports {
+            mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+        }
+    }
+    */
+    tasks.named('test') {
+        useJUnitPlatform()
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
+
+//---------------의존성 없는 모듈
+/*
+project(':common-types') {
+    bootJar { enabled = false }
+    jar { enabled = true }
+}
+*/
+
+//---------------의존성 있는 모듈
+project(':hans') {
+    dependencies {
+
+    }
+}
